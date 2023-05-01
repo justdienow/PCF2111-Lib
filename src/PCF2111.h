@@ -15,12 +15,16 @@
 #include "WProgram.h"
 #endif
 
+#define DATA_COUNT 4
+#define LCD_BACKPLANE 2
+
 class PCF2111 {
 private:
+    byte displayData[LCD_BACKPLANE][DATA_COUNT];
+    byte activeBP;
     uint8_t _DLEN_pin;
     uint8_t _CLB_pin;
     uint8_t _DATA_pin;
-    byte activeBP;
 public:
     /**
      * \brief Constructor. Use begin() to complete the initialization of the chip.

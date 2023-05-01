@@ -9,6 +9,9 @@
 #include "PCF2111.h"
 
 void PCF2111::begin() {
+    displayData[LCD_BACKPLANE][DATA_COUNT] = {{0,0,0,0},{0,0,0,0}};
+    activeBP = 0;
+    
     pinMode(_DLEN_pin, OUTPUT);
     pinMode(_CLB_pin, OUTPUT);
     pinMode(_DATA_pin, OUTPUT);
@@ -16,8 +19,6 @@ void PCF2111::begin() {
     digitalWrite(_DLEN_pin, LOW);
     digitalWrite(_CLB_pin, LOW);
     digitalWrite(_DATA_pin, LOW);
-
-    activeBP = 0
 }
 
 void PCF2111::shiftBit(byte value) {
