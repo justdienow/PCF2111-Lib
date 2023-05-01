@@ -1,0 +1,21 @@
+#######################################
+# Syntax Coloring Map For PCF2111
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+PCF2111                 KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+begin                   KEYWORD2
+shiftBit                KEYWORD2
+shiftByte               KEYWORD2
+updateDisplay           KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+COMMAND_MODE            LITERAL1
