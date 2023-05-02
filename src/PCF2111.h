@@ -6,25 +6,20 @@
  *  included in any redistribution.
  */
 
-#ifndef _PCF2111_h
-#define _PCF2111_h
+#ifndef PCF2111_H_
+#define PCF2111_H_
 
-#if ARDUINO >= 100
-#include "Arduino.h"
+//Arduino toolchain header, version dependent
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "Arduino.h"
 #else
-#include "WProgram.h"
+	#include "WProgram.h"
 #endif
 
 #define DATA_COUNT 4
 #define LCD_BACKPLANE 2
 
 class PCF2111 {
-private:
-    byte displayData[LCD_BACKPLANE][DATA_COUNT];
-    byte activeBP;
-    uint8_t _DLEN_pin;
-    uint8_t _CLB_pin;
-    uint8_t _DATA_pin;
 public:
     /**
      * \brief Constructor. Use begin() to complete the initialization of the chip.
@@ -32,18 +27,21 @@ public:
      * @param \c CLBpin Clock burst input (CBUS) pin.
      * @param \c DATApin Data input line (CBUS) pin for writing data.
      */
-    PCF2111(uint8_t DLENpin, uint8_t CLBpin, uint8_t DATApin) : _DLEN_pin(DLENpin), _CLB_pin(CLBpin), _DATA_pin(DATApin) {};
-
-    /**
-     *  \brief Init the PCF2111. It inits the control bus.
-     */
-    void begin();
+    PCF2111(byte DLENpin, byte CLBpin, byte DATApin);
 
     void shiftBit(byte value);
 
     void shiftByte(byte value);
 
-    void updateDisplay();
+    void updateDisplay(byte bp);
+
+    byte** getDisplayData();
+private:
+    byte _displayData[LCD_BACKPLANE][DATA_COUNT];
+    byte _activeBP;
+    byte _DLENpin;
+    byte _CLBpin;
+    byte _DATApin;
 };
 
 #endif

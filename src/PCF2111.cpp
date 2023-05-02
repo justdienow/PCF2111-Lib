@@ -2,29 +2,36 @@
  * \file PCF2111.cpp
  * \brief Implementation of a class for dealing with the PCF2111 LCD driver IC.
  * \author Justdienow
- * \copyright BSD license, check the License page on the blog for more information. All this text must be
- *  included in any redistribution.
+ * \copyright TODO
  */
 
 #include "PCF2111.h"
 
-void PCF2111::begin() {
-    displayData[LCD_BACKPLANE][DATA_COUNT] = {{0,0,0,0},{0,0,0,0}};
-    activeBP = 0;
+PCF2111::PCF2111(byte DLENpin, byte CLBpin, byte DATApin) {
+    for (byte i = 0; i < LCD_BACKPLANE; i++) {
+        for (byte j = 0; j < DATA_COUNT; j++) {
+            _displayData[i][j] = 255;
+        }
+    }
     
-    pinMode(_DLEN_pin, OUTPUT);
-    pinMode(_CLB_pin, OUTPUT);
-    pinMode(_DATA_pin, OUTPUT);
+    _activeBP = 0;
+    _DLENpin = DLENpin;
+    _CLBpin = CLBpin;
+    _DATApin = DATApin;
 
-    digitalWrite(_DLEN_pin, LOW);
-    digitalWrite(_CLB_pin, LOW);
-    digitalWrite(_DATA_pin, LOW);
+    pinMode(_DLENpin, OUTPUT);
+    pinMode(_CLBpin, OUTPUT);
+    pinMode(_DATApin, OUTPUT);
+
+    digitalWrite(_DLENpin, LOW);
+    digitalWrite(_CLBpin, LOW);
+    digitalWrite(_DATApin, LOW);
 }
 
 void PCF2111::shiftBit(byte value) {
-    digitalWrite(_CLB_pin, HIGH);
-    digitalWrite(_DATA_pin, value);
-    digitalWrite(_CLB_pin, LOW);
+    digitalWrite(_CLBpin, HIGH);
+    digitalWrite(_DATApin, value);
+    digitalWrite(_CLBpin, LOW);
 }
 
 void PCF2111::shiftByte(byte value) {
@@ -35,16 +42,43 @@ void PCF2111::shiftByte(byte value) {
     }
 }
 
-void PCF2111::updateDisplay() {
-    activeBP ^= 0x01;
-    digitalWrite(_DLEN_pin, HIGH);
+void PCF2111::updateDisplay(byte bp) {
+    // _activeBP ^= 0x01;
+
+    _activeBP = bp;
+
+    digitalWrite(_DLENpin, HIGH);
     shiftBit(0);                  // leading zero
 
-    for(byte c=0; c < DATA_COUNT; c++) {
-        shiftByte(displayData[activeBP][c]);
+    for(byte i = 0; i < DATA_COUNT; i++) {
+        shiftByte(_displayData[_activeBP][i]);
+        Serial.print("In updateDisplay() LOOP - DD :: ");
+        Serial.println(_displayData[_activeBP][i]);
     }
 
-    shiftBit(activeBP);           // load bit
-    digitalWrite(_DLEN_pin, LOW);
+    shiftBit(_activeBP);           // load bit
+
+    // for (byte i = 0; i < LCD_BACKPLANE; i++) {
+    //     for (byte j = 0; j < DATA_COUNT; j++) {
+    //         // _displayData[i][j] = 254;
+    //         shiftByte(_displayData[i][j]);
+    //         Serial.print("In updateDisplay() LOOP - DD :: ");
+    //         Serial.println(_displayData[i][j]);
+    //     }
+    //     shiftBit(i); 
+    // }
+
+    digitalWrite(_DLENpin, LOW);
     shiftBit(0);                  // load pulse
+}
+
+byte** PCF2111::getDisplayData() {
+    byte** copyData = new byte*[LCD_BACKPLANE];
+    for (byte i = 0; i < LCD_BACKPLANE; i++) {
+        copyData[i] = new byte[DATA_COUNT];
+        for (byte j = 0; j < DATA_COUNT; j++) {
+            copyData[i][j] = _displayData[i][j];
+        }
+    }
+    return copyData;
 }

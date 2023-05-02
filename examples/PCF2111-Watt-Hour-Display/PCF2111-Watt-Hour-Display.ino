@@ -42,6 +42,10 @@ void shiftByte(byte value) {
 
 void updateDisplay() {
   activeBP ^= 0x01;
+
+  Serial.print("In updateDisplay() - activeBP :: ");
+  Serial.println(activeBP);
+
   digitalWrite(PIN_DLEN, HIGH);
   shiftBit(0);                  // leading zero
 
@@ -54,17 +58,19 @@ void updateDisplay() {
   shiftBit(0);                  // load pulse
 }
 
-byte bp = 0;
+byte bp = 1;
 byte digit = 0;
 void loop() {
   unsigned long currentMillis = millis();
-//  while (Serial.available()==0){} // wait for user input
-//  number = (byte)Serial.parseInt();
+  while (Serial.available()==0){} // wait for user input
+  number = (byte)Serial.parseInt();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
     Serial.println("----");
-     displayData[bp][digit] += 1;
-//    displayData[bp][digit] = number;
+    Serial.print("Number :: ");
+    Serial.println(number);
+    //  displayData[bp][digit] += 1;
+    displayData[bp][digit] = number;
     // displayData[0][1] = displayData[0][0];
     // displayData[0][2] = displayData[0][0];
     // displayData[0][3] = displayData[0][0];
