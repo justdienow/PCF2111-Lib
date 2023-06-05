@@ -12,7 +12,7 @@ PCF2111                 KEYWORD1
 #######################################
 shiftBit                KEYWORD2
 shiftByte               KEYWORD2
-updateDisplay           KEYWORD2
+writeDisplay            KEYWORD2
 getDisplayData          KEYWORD2
 
 #######################################
