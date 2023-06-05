@@ -15,9 +15,9 @@ The PCB you see before you are from an old watt hour meter that I found in an e-
 When you call `writeDisplay()`, it will immediately write to the display.
 
 ## CIRCUIT AND DISPLAY MAP
-![Pinout]("/extras/Watthour Pinout.png")
+![Pinout](/extras/Watthour%20Pinout.png)
 
-![Segments]("/extras/Watt-hour meter LCD Map - propper.png")
+![Segments](/extras/Watt-hour%20meter%20LCD%20Map%20-%20propper.png)
 
 ## Links
 - Datasheet: <https://pdf.datasheetcatalog.com/datasheet/philips/PCF2100.pdf>
